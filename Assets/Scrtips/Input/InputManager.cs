@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public InputView view;
+    [SerializeField] private InputView view;
 
-    public Vector2 firstPoint;
-    public Vector2 dir;
+    [SerializeField] private Vector2 clickPos;
+    [SerializeField] private Vector2 inputDir;
 
     public GameObject test;
     
     // Start is called before the first frame update
     void Start()
     {
-        firstPoint = Vector2.zero;
-        dir = Vector2.zero;
+        clickPos = Vector2.zero;
+        inputDir = Vector2.zero;
 
         view.Init();
     }
@@ -23,7 +23,6 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         MouseInput();
 
         TouchInput();
@@ -39,8 +38,8 @@ public class InputManager : MonoBehaviour
             {
                 case TouchPhase.Began:
 
-                    firstPoint = Camera.main.ScreenToWorldPoint(touch.position);
-                    view.ShowJoystick(firstPoint);
+                    clickPos = Camera.main.ScreenToWorldPoint(touch.position);
+                    view.ShowJoystick(clickPos);
 
                     break;
                 case TouchPhase.Moved:
@@ -48,17 +47,17 @@ public class InputManager : MonoBehaviour
 
                     Vector2 curPoint = Camera.main.ScreenToWorldPoint(touch.position);
 
-                    dir = curPoint - firstPoint;
-                    dir.Normalize();
+                    inputDir = curPoint - clickPos;
+                    inputDir.Normalize();
 
                     view.MoveJoystickDir(curPoint);
-                    TestMove(dir);
+                    TestMove(inputDir);
                     break;
                 case TouchPhase.Ended:
                 case TouchPhase.Canceled:
 
-                    firstPoint = Vector2.zero;
-                    dir = Vector2.zero;
+                    clickPos = Vector2.zero;
+                    inputDir = Vector2.zero;
 
                     view.HideJoystick();
 
@@ -73,26 +72,26 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            firstPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            view.ShowJoystick(firstPoint);
+            view.ShowJoystick(clickPos);
         }
 
         if (Input.GetMouseButton(0))
         {
-            Vector2 curPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 curPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            view.MoveJoystickDir(curPos);
 
-            dir = curPoint - firstPoint;
-            dir.Normalize();
 
-            view.MoveJoystickDir(curPoint);
-            TestMove(dir);
+            inputDir = curPos - clickPos;
+            inputDir.Normalize();           
+            TestMove(inputDir);
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            firstPoint = Vector2.zero;
-            dir = Vector2.zero;
+            clickPos = Vector2.zero;
+            inputDir = Vector2.zero;
 
             view.HideJoystick();
         }

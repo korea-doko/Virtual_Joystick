@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// required Joystick is entire Joystick sub view.
+/// outer Large circle is basically used.
+/// </summary>
+[RequireComponent(typeof(Joystick))]
 public class InputView : MonoBehaviour
 {
     public Joystick joystick;

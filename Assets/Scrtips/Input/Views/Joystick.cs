@@ -3,15 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// required Transform Component is indicator.
+/// indicator is dot in joystick.
+/// it indicates where user input direct.
+/// </summary>
+[RequireComponent(typeof(Transform))]
 public class Joystick : MonoBehaviour
 {
-    public Transform indicator;
+    public Transform indicator;     
 
-    public float radius;
+    public float joystickRadius;
+    public float indicatorRadius;
 
     public void Init()
     {
-        radius = this.GetComponent<SpriteRenderer>().size.x;
+        joystickRadius = this.GetComponent<SpriteRenderer>().size.x;
+        indicatorRadius = indicator.GetComponent<SpriteRenderer>().size.x;
 
         Hide();
     }
@@ -36,7 +44,7 @@ public class Joystick : MonoBehaviour
                 curPoint.y - this.transform.position.y
             );
         
-        bool isLongerThanRadius = dir.magnitude >= radius ? true : false;
+        bool isLongerThanRadius = dir.magnitude >= (joystickRadius + indicatorRadius)? true : false;
         
         if( isLongerThanRadius )
         {
